@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id = "canvas"  width="800" height="800" style="background-color: beige;"></canvas>
+</body>
+<script>
+    var canvas = document.getElementById("canvas");
+    var color = "blue";
+    var pressed = false;
+    var ctx = canvas.getContext("2d");
+        canvas.addEventListener("mouseover",function(e){
+            color = getRandomColor();
+        });
+        canvas.addEventListener("mousemove",function(e){
+            if(pressed){
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(e.layerX,e.layerY,10,0,2*Math.PI);
+                ctx.fill();
+            }
+        });
+        canvas.addEventListener("mousedown",function(e){
+          pressed = true;
+        });
+        canvas.addEventListener("mouseup",function(e){
+          pressed = false;
+        });
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+    </script>
+</html>
