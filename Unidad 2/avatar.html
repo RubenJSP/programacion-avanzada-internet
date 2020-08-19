@@ -75,18 +75,28 @@
     ctx.fillStyle = "#edd5b7";
     ctx.fill();
 
-
-    //Ojos
-    ctx.beginPath();
     //Cabeza
     ctx.beginPath();
     ctx.lineWidth = 2;
-    ctx.ellipse(350,255,45,55,Math.PI*1.98,Math.PI,0);
+    ctx.ellipse(350,265,45,55,Math.PI*1.98,Math.PI,0);
     ctx.fill();
     ctx.stroke();
     ctx.beginPath();
-    ctx.ellipse(350,270,45,45,Math.PI,Math.PI,0);
+    ctx.ellipse(350,270,45,35,Math.PI,Math.PI,0);
     ctx.fill();
     ctx.stroke();
+    //Ojos
+    ctx.beginPath();
+    ctx.fillStyle = "#000";
+    ctx.arc(335,240,7,0,2 * Math.PI);
+    ctx.arc(360,240,7,0,2 * Math.PI);
+    ctx.fill();
+    //Sombrero
+    ctx.beginPath();
+    ctx.fillStyle = "#240f0a";
+    ctx.fillRect(300,208,100,17);
+    ctx.ellipse(350,208,35,35,0,Math.PI,0);
+    ctx.fill();
+
 
 </script>

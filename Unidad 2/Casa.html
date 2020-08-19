@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="800"  style="background-color: beige;"></canvas>
+</body>
+<script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+
+    //Sol
+    ctx.arc(600,100,50,0,Math.PI * 2);
+    ctx.fillStyle = "#eeff00";
+    ctx.fill();
+    //Casa
+    ctx.beginPath();
+    ctx.fillStyle = "#d1c7ce";
+    ctx.fillRect(400,400,200,200);
+    ctx.fillStyle = "#78531c";
+    ctx.fillRect(480,530,50,70);
+    ctx.fillStyle = "#6ed7e0";
+    ctx.fillRect(430,420,60,60);
+    ctx.fillRect(520,420,60,60);
+    ctx.fillStyle = "#5016b5";
+    ctx.arc(520,570,5,0,Math.PI *2);
+    ctx.fill();
+    //Techo
+    ctx.beginPath();
+    ctx.strokeStyle = "#78531c";
+    ctx.lineWidth = 30;
+    ctx.moveTo(506,320);
+    ctx.lineTo(360,405);
+    ctx.moveTo(490,320);
+    ctx.lineTo(640,405);
+    ctx.stroke();
+    //Arbol
+
+    ctx.beginPath();
+    ctx.fillStyle = "#4a2a0f";
+    ctx.fillRect(100,400,50,200);
+    ctx.beginPath();
+    ctx.fillStyle = "#28c912";
+    ctx.arc(120,325,80,0,Math.PI * 2);
+    ctx.arc(50,325,20,0,Math.PI * 2);
+    ctx.arc(45,330,30,0,Math.PI * 2);
+    ctx.arc(70,340,40,0,Math.PI * 2);
+    ctx.arc(70,300,40,0,Math.PI * 2);
+    ctx.arc(100,270,40,0,Math.PI * 2);
+    ctx.arc(150,270,50,0,Math.PI * 2);
+    ctx.arc(180,300,50,0,Math.PI * 2);
+    ctx.arc(170,330,50,0,Math.PI * 2);
+    ctx.arc(160,360,40,0,Math.PI * 2);
+    ctx.fill();
+    //Manzanas
+    ctx.beginPath();
+    ctx.fillStyle = "#F00";
+    ctx.arc(100,330,15,0,Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(105,290,7,0,Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(150,300,10,0,Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(180,380,10,0,Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(155,340,10,0,Math.PI * 2);
+    ctx.fill()
+    </script>
+</html>
