@@ -14,13 +14,14 @@
 	x = 400,
 	y = 400,
 	dx = 0,
-	dy = 0;
+	dy = 0,
+    speed = 10;
 window.requestAnimationFrame = (function() {
 	return window.requestAnimationFrame
 	window.mozRequestAnimationFrame
 	window.webkitRequestAnimationFrame ||
 		function(callback) {
-			window.setTimeout(callback, 10);
+			window.setTimeout(callback, 17);
 		};
 }());
 
@@ -40,19 +41,19 @@ function act() {
 
 		console.log();
 		if (e.key == "w") {
-			dy = -6;
+			dy = -speed;
 			dx = 0;
 		}
 		if (e.key == "s") {
-			dy = 6;
+			dy = speed;
 			dx = 0;
 		}
 		if (e.key == "d") {
-			dx = 6;
+			dx = speed;
 			dy = 0;
 		}
 		if (e.key == "a") {
-			dx = -6;
+			dx = -speed;
 			dy = 0;
 		}
 	});
