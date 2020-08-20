@@ -9,7 +9,7 @@
     <canvas id = "canvas"  width="800" height="800" style="background-color: beige;"></canvas>
 </body>
 <script type="text/javascript">
-  var canvas = null,
+   var canvas = null,
 	ctx = null,
 	x = 400,
 	y = 400,
@@ -64,6 +64,7 @@ function act() {
 		y = 799;
 	if (y >= 800)
 		y = 0;
+
 }
 
 function run() {
@@ -79,6 +80,7 @@ function init() {
 	run();
 }
 
+window.addEventListener('load', init, false);
 
 </script>
 </html>
