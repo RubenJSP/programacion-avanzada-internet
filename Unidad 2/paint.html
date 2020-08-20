@@ -9,72 +9,76 @@
     <canvas id = "canvas"  width="800" height="800" style="background-color: beige;"></canvas>
 </body>
 <script type="text/javascript">
-    var canvas = null, ctx = null,x=400,y=400,dx = 0 , dy = 0;
-    window.requestAnimationFrame = (function () {
-    return window.requestAnimationFrame 
-        window.mozRequestAnimationFrame 
-        window.webkitRequestAnimationFrame ||
-        function (callback) {
-            window.setTimeout(callback, 10);
-        };
-    }());
-    function paint(ctx)
-    {
-        ctx.fillStyle = "#000";
-        ctx.fillRect(0,0,800,800);
-        
-        ctx.fillStyle = "#0F0";
-        
-        ctx.fillRect(x,y,10,10);
-    }
-    function act(){
-        x+=dx;
-        y+=dy;
-        window.addEventListener("keypress",function(e){
-            
-            console.log();
-            if(e.key == "w"){
-                dy = -6;
-                dx = 0;
-            }
-            if(e.key == "s"){
-                dy = 6;
-                dx = 0;
-            }
-            if(e.key == "d"){
-                dx = 6;
-                dy = 0;
-            }
-            if(e.key == "a"){
-                dx = -6;
-                dy = 0;
-            }
-        });
-        if(x<0)
-            x =799;
-        if(x>=800)
-            x = 0;
-        if(y<0)
-            y =799;
-        if(y>=800)
-            y = 0;
-    
-      
-           
-    }
-    function run(){
-        window.requestAnimationFrame(run);
-        act();
-        paint(ctx);
+  var canvas = null,
+	ctx = null,
+	x = 400,
+	y = 400,
+	dx = 0,
+	dy = 0;
+window.requestAnimationFrame = (function() {
+	return window.requestAnimationFrame
+	window.mozRequestAnimationFrame
+	window.webkitRequestAnimationFrame ||
+		function(callback) {
+			window.setTimeout(callback, 10);
+		};
+}());
 
-    }
-    function init(){
-        canvas = document.getElementById('canvas');
-        ctx = canvas.getContext('2d');
-        run();
-    } 
+function paint(ctx) {
+	ctx.fillStyle = "#000";
+	ctx.fillRect(0, 0, 800, 800);
 
-    window.addEventListener('load',init,false);
+	ctx.fillStyle = "#0F0";
+
+	ctx.fillRect(x, y, 10, 10);
+}
+
+function act() {
+	x += dx;
+	y += dy;
+	window.addEventListener("keypress", function(e) {
+
+		console.log();
+		if (e.key == "w") {
+			dy = -6;
+			dx = 0;
+		}
+		if (e.key == "s") {
+			dy = 6;
+			dx = 0;
+		}
+		if (e.key == "d") {
+			dx = 6;
+			dy = 0;
+		}
+		if (e.key == "a") {
+			dx = -6;
+			dy = 0;
+		}
+	});
+	if (x < 0)
+		x = 799;
+	if (x >= 800)
+		x = 0;
+	if (y < 0)
+		y = 799;
+	if (y >= 800)
+		y = 0;
+}
+
+function run() {
+	window.requestAnimationFrame(run);
+	act();
+	paint(ctx);
+
+}
+
+function init() {
+	canvas = document.getElementById('canvas');
+	ctx = canvas.getContext('2d');
+	run();
+}
+
 
 </script>
 </html>
