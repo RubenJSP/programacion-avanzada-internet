@@ -44,7 +44,7 @@ function paint(ctx) {
 		ctx.font = "16px Arial";
 		ctx.fillStyle = "#FFF";
 		ctx.fillText("Puntos: " + points, 10, 20)
-		ctx.fillText((pause && !gameOver)? "Pause":"'P' para pausar", 10, 40)
+		ctx.fillText((pause)? "Pause":"'P' para pausar", 10, 40)
 		ctx.fillStyle = "#FFF";
 		walls.forEach(wall => {
 				wall.paint(ctx);
