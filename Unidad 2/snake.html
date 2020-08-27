@@ -14,6 +14,9 @@ var canvas = null,
 	gameOver = false,
 	ctx = null,
 	player = null,
+	playerImg = null,
+	foodImg = null,
+	wallImg = null,
 	food = null,
 	points = 0,
 	pointValue = 10,
@@ -21,7 +24,13 @@ var canvas = null,
 	y = 400,
 	dx = 0,
 	dy = 0,
-	playerSize = 20,
+	playerSize = 30,
+	foodSize = 30,
+	wallSize = 30,
+	eatSound = null,
+	deathSound = null,
+	pauseSound = null,
+	movingSound = null,
 	speed = 4,
 	walls = new Array();
 window.requestAnimationFrame = (function() {
@@ -49,6 +58,7 @@ function paint(ctx) {
 		walls.forEach(wall => {
 				wall.paint(ctx);
 				if(wall.collide(player)){
+					deathSound.play();
 					loadMap();
 					gameOver = true;
 					pause = true;
@@ -75,6 +85,7 @@ function act() {
 	}
 
 	if (player.collide(food)) {
+		eatSound.play();
 		food.x = randomValue();
 		food.y = randomValue();
 		points += pointValue;
@@ -92,6 +103,7 @@ function act() {
 
 }
 window.addEventListener("keypress", function(e) {
+	movingSound.play()
 	if (e.key == "w") {
 		dy = -speed;
 		dx = 0;
@@ -115,6 +127,7 @@ window.addEventListener("keypress", function(e) {
 	if(e.key == "p" || e.key == "P"){
 		pause = !pause;
 		gameOver = false;
+		pauseSound.play();
 	}
 });
 
@@ -130,7 +143,7 @@ function loadMap(){
 	walls = new Array();
 	for (let i = 0; i < 5; i++){
 		var wX = randomValue(), wY = randomValue();
-			walls.push(new Rectangle(wX,wY,15,15));
+			walls.push(new Rectangle(wallImg,wX,wY,wallSize,wallSize));
 	}
 }
 
@@ -138,21 +151,40 @@ function init() {
 	var fX = randomValue(),fY = randomValue();
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
-	player = new Rectangle(x, y, playerSize, playerSize);
-	food = new Rectangle(randomValue(), randomValue(), 10, 10);
+	playerImg = new Image();
+	foodImg = new Image();
+	wallImg = new Image();
+	playerImg.src = "assets/pacman.png";
+	foodImg.src = "assets/fantasma.png";
+	wallImg.src = "assets/wall.png";
+	eatSound = new Audio("assets/sound/eat.wav");
+	deathSound = new Audio("assets/sound/death.wav");
+	pauseSound = new Audio("assets/sound/pause.wav");
+	movingSound = new Audio("assets/sound/moving.wav");
+	eatSound.volume = 0.2;
+	deathSound.volume = 0.2;
+	pauseSound.volume = 0.2;
+	movingSound.volume = 0.2;
+	player = new Rectangle(playerImg,x, y, playerSize, playerSize);
+	food = new Rectangle(foodImg,randomValue(), randomValue(), foodSize, foodSize);
 	loadMap();	
 	run();
 }
 
 window.addEventListener('load', init, false);
 
-function Rectangle(x, y, w, h) {
+function Rectangle(img,x, y, w, h) {
+	this.img = img;
 	this.x = x;
 	this.y = y;
 	this.w = w;
 	this.h = h;
 	this.paint = function(ctx) {
-		ctx.fillRect(this.x, this.y, this.w, this.h);
+		if(this.img ==null)
+			ctx.fillRect(this.x, this.y, this.w, this.h);
+		else
+			ctx.drawImage(this.img,this.x,this.y,this.w,this.h);
+			
 	}
 
 	this.collide = function(rect) {
