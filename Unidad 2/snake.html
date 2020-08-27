@@ -103,7 +103,6 @@ function act() {
 
 }
 window.addEventListener("keypress", function(e) {
-	movingSound.play()
 	if (e.key == "w") {
 		dy = -speed;
 		dx = 0;
@@ -128,7 +127,8 @@ window.addEventListener("keypress", function(e) {
 		pause = !pause;
 		gameOver = false;
 		pauseSound.play();
-	}
+	}else
+		movingSound.play()
 });
 
 function run() {
