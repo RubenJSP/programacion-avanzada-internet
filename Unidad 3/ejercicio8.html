@@ -2,6 +2,8 @@
 <html>
 <head>
 	<title>Clase</title>
+	<script src="Js/jquery.js"></script>
+
 	<style type="text/css">
 		.super_div{
 			width: 100%;
@@ -18,16 +20,25 @@
 			height: 300px;
 			float: left;
 		}
+
+		.sizeAndColor{
+			width: 50px;
+			background-color:lightseagreen !important;
+		}
 	</style>
 </head>
 <body>
 
-	<div class="super_div">
+	<div id = "parent" class="super_div">
 		<div  id="primer_div" class=" otra_clase mini_div" style="background-color: #2ECC71;"></div>
 		<div class="mini_div" style="background-color: #D98880;"></div>
 		<div  class="otra_clase mini_div" style="background-color: #F9E79F;"></div>
 	</div>
-
+	<script>
+		$("document").ready(function(){
+			$("#parent").children('div').eq(1).addClass("sizeAndColor");
+		});
+	</script>
  
 </body>
 </html>
