@@ -34,8 +34,8 @@ var canvas = null,
 	speed = 4,
 	walls = new Array();
 window.requestAnimationFrame = (function() {
-	return window.requestAnimationFrame
-	window.mozRequestAnimationFrame
+	return window.requestAnimationFrame||
+	window.mozRequestAnimationFrame||
 	window.webkitRequestAnimationFrame ||
 		function(callback) {
 			window.setTimeout(callback, 17);
@@ -131,12 +131,7 @@ window.addEventListener("keypress", function(e) {
 		movingSound.play()
 });
 
-function run() {
-	window.requestAnimationFrame(run);
-	act();
-	paint(ctx);
-
-}
+c
 
 function loadMap(){
 	walls = [];
