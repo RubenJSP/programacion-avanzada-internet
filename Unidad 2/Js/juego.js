@@ -53,13 +53,22 @@ const matrix = [
 var map = [];
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext('2d');
-var player = null,pX = 100, pY=0,wallX=0,wallY=0,standing=null,walking = null, wallImg=null,grassImg=null;
+var player = null,pX = 100, pY=0,wallX=0,wallY=0,standing=null,walking = null, borderImg=null,wallImg = null,grassImg=null;
 //Init player img
-/*standing = new Image();
-walking = new Image();
-standing.src = "assets/laberinto/stand.gif";
-walking.src = "assets/laberinto/walk.gif";
-player = new Chunk(standing,100,100,40,56,false);*/
+
+function loadRes(){
+standing = new Image();
+borderImg = new Image();
+grassImg = new Image();
+wallImg = new Image();
+borderImg.src = "assets/laberinto/border.jpg";
+wallImg.src = "assets/laberinto/wall.jpg";
+grassImg.src = "assets/laberinto/grass.jpg";
+
+}
+//standing.src = "assets/laberinto/stand.gif";
+
+//player = new Chunk(standing,100,100,40,56,false);
 
 function Chunk(img,x,y,w,h,isWall){
     this.img = img;
@@ -113,11 +122,9 @@ window.requestAnimationFrame = (function() {
 }());
 function run() {
 	window.requestAnimationFrame(run);
-	test(context);
+	renderMap(context,map);
 }
-function draw(context){
-    renderMap(context);
-}
+
 function renderPlayer(context,player){
     player.render(context);
 }
@@ -133,22 +140,43 @@ function checkPath(player,map){
 		for (let j = 0; j < 30; j++)
 			return player.collide(map[i][j]); 
 }
-function renderMap(context){
 
+function renderMap(context,map){
+	for (let i = 0; i < 50; i++) 
+		for (let j = 0; j < 30; j++) 
+			map[i][j].render(context);
 }
-function fillMap(){
-	let offsetX=19,offsetY=19;
+function createMap(map){
+	for (let i = 0; i < 50; i++) 
+		map[i] = new Array(30);	
+}
+function fillMap(map){
+	let x=0,y=0,side=19;
     for (let i = 0; i < 50; i++) {
+		x=0;
         for (let j = 0; j < 30; j++) {
+			if(((i==0 || i == 49) || (j==0||j == 29)) && matrix[i][j]!=2)
+				map[i][j] = new Chunk(borderImg,x,y,side,side,true);
+			else if(matrix[i][j]==1)
+				map[i][j]= new Chunk(wallImg,x,y,side,side,true);
+			else
+				map[i][j] = new Chunk(grassImg,x,y,side,side,false);
+
+			x+=side;	
         }
-        
-    }
+		y+=side;
+	}
 }
-function test(context){
+function init(){
+	loadRes();
+	createMap(map);
+	fillMap(map);
+	//console.log(map[0][0])
+	run();
 	//player.render(context);
 }
 window.addEventListener("keypress",function(e){
-	if(e.key == 'w'||e.key == 'W')
+	//if(e.key == 'w'||e.key == 'W')
 
 });
 
