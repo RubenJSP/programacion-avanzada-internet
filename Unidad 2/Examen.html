@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laberinto</title>
 </head>
-<body>
-    <canvas id="canvas" width="570" height="950" style="background-color: white;"></canvas>
+<body style="display: flex;">
+    <div>
+        <div>"H" para ver/ocultar ayuda, "M" para activar/deasctivar el mini mapa</div>
+        <canvas id="canvas" width="836" height="912" style="background-color: white;"></canvas>
+    </div>
+    <canvas id="miniMap" width="300" height="500" style="position: absolute; top:25px; left: 850px; background-color:black"></canvas>
 </body>
 <script src="Js/juego.js"></script>
 <script>
