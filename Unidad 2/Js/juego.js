@@ -52,6 +52,7 @@ const matrix = [
 ];
 var map = [];
 var map2 = [];
+var sprites = [];
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext('2d');
 context.scale(4, 4);
@@ -61,6 +62,8 @@ miniMapContext.scale(1, 1);
 var player = null,
 	pX = 99,
 	pY = 101,
+	left = 0,
+	right = 4,
 	pointX = 0,
 	pointY = 0,
 	pH = 14,
@@ -233,8 +236,13 @@ function moveMap(offset, key, map) {
 			}
 		}
 }
+function walking(player,img,count){
+	player.img = img[count];
+}
 //Mueve al jugador y verifica colisiones con el mapa
 function movePlayer(player, key) {
+	player.img = playerImg;
+
 	switch (key) {
 		case 'W':
 			if (++map[0][0].y <= 99) {
@@ -249,6 +257,10 @@ function movePlayer(player, key) {
 			break;
 		case 'A':
 			player.x -= playerStep;
+			if(right == 7)
+				right = 4;
+			walking(player,sprites,right);
+			right++;
 			if (!checkPath(player)) {
 				moveMap(playerStep, key.toUpperCase(), map);
 				pointX -= 5;
@@ -268,6 +280,10 @@ function movePlayer(player, key) {
 			break;
 		case 'D':
 			player.x += playerStep;
+			if(left == 4)
+				left = 0;
+			walking(player,sprites,left);
+			left++;
 			if (!checkPath(player)) {
 				moveMap(playerStep, key.toUpperCase(), map);
 				pointX += 5;
@@ -317,6 +333,11 @@ window.addEventListener("keypress", function(e) {
 function init() {
 	//Inicializar jugador
 	player = new Chunk(playerImg, pX, pY, pW, pH, false);
+	let url = "assets/laberinto/anim/";
+	for (let i = 0; i < 8; i++) {
+		sprites.push(new Image());
+		sprites[i].src = url + (i+1) + ".png"
+	}
 	createMap(map);
 	createMap(map2);
 	fillMap(map, 0, 99, 19);
