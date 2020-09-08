@@ -52,6 +52,7 @@ const matrix = [
 ];
 var map = [];
 var map2 = [];
+var sprites = [];
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext('2d');
 context.scale(4, 4);
@@ -61,6 +62,8 @@ miniMapContext.scale(1, 1);
 var player = null,
 	pX = 99,
 	pY = 101,
+	left = 0,
+	right = 4,
 	pointX = 0,
 	pointY = 0,
 	pH = 14,
@@ -69,7 +72,7 @@ var player = null,
 	help = false,
 	gameOver = false,
 	miniMapVisible = true,
-	pauseMusic = false,
+	pause = false,
 	play = false,
 	wallX = 0,
 	wallY = 0,
@@ -79,9 +82,7 @@ var player = null,
 	wallImg = null,
 	grassImg = null,
 	background = null
-	step = null,
 	music = null;
-
 //Cargar imágenes
 playerImg = new Image();
 borderImg = new Image();
@@ -89,6 +90,7 @@ grassImg = new Image();
 wallImg = new Image();
 helpImg = new Image();
 background = new Image();
+music = new Audio("assets/sound/background.ogg");
 playerImg.src = "assets/laberinto/player.png";
 borderImg.src = "assets/laberinto/border.jpg";
 wallImg.src = "assets/laberinto/wall.jpg";
@@ -195,7 +197,7 @@ function win(context) {
 		context.fillStyle = "#FFF";
 		context.fillText("¡GANASTE :D!", 48, 99);
 		context.font = "8px Arial";
-		context.fillText("'P' para continuar", 70, 110);
+		context.fillText("'C' para continuar", 70, 110);
 		gameOver = true;
 	}
 
@@ -239,8 +241,12 @@ function moveMap(offset, key, map) {
 			}
 		}
 }
+function walking(player,img,count){
+	player.img = img[count];
+}
 //Mueve al jugador y verifica colisiones con el mapa
 function movePlayer(player, key) {
+	player.img = playerImg;
 	switch (key) {
 		case 'W':
 			if (++map[0][0].y <= 99) {
@@ -255,6 +261,10 @@ function movePlayer(player, key) {
 			break;
 		case 'A':
 			player.x -= playerStep;
+			if(right == 7)
+				right = 4;
+			walking(player,sprites,right);
+			right++;
 			if (!checkPath(player)) {
 				moveMap(playerStep, key.toUpperCase(), map);
 				pointX -= 5;
@@ -274,6 +284,10 @@ function movePlayer(player, key) {
 			break;
 		case 'D':
 			player.x += playerStep;
+			if(left == 4)
+				left = 0;
+			walking(player,sprites,left);
+			left++;
 			if (!checkPath(player)) {
 				moveMap(playerStep, key.toUpperCase(), map);
 				pointX += 5;
@@ -312,53 +326,36 @@ window.addEventListener("keypress", function(e) {
 		miniMapVisible = !miniMapVisible;
 	}
 	//El jugador puede jugar de nuevo (reinicia el mapa)
-	if (e.key.toUpperCase() == 'P' && gameOver)
+	if (e.key.toUpperCase() == 'C' && gameOver)
 		reset();
+	//Pause/Play música
+	if(e.key.toUpperCase() == 'P')
+		pause = !pause;
 
+	if(pause)
+		music.pause();
+	else
+		music.play();
+		
 	//No puedes moverte si la ayuda está activa o el juego ha  terminado
 	if (!gameOver && !help)
 		movePlayer(player, e.key.toUpperCase());
 });
 
-function path(i,j){
-	//Arriba
-	if(matrix[i][j]==1)
-		return;
-
-			if(matrix[i][j] == 0){
-				matrix[i][j] = 1;
-				map2[i][j].img = null;
-			}
-
-	
-			if(matrix[i][j+1]==0){
-				path(i,j+1);
-			}
-			
-			if(matrix[i][j-1]==0){
-				path(i,j-1);
-			}
-		
-		
-
-			if(matrix[i+1][j]==0){
-				path(i+1,j);
-			}
-			
-			if(matrix[i-1][j]==0){
-				path(i-1,j);
-			}
-		
-}
 //Inicializa el juego
 function init() {
 	//Inicializar jugador
 	player = new Chunk(playerImg, pX, pY, pW, pH, false);
+	music.volume = 0.5;
+	music.loop = true;
+	let url = "assets/laberinto/anim/";
+	for (let i = 0; i < 8; i++) {
+		sprites.push(new Image());
+		sprites[i].src = url + (i+1) + ".png"
+	}
 	createMap(map);
 	createMap(map2);
 	fillMap(map, 0, 99, 19);
 	fillMap(map2, 0, 0, 10);
-	//foo();
-	//console.log();
 	run();
 }
