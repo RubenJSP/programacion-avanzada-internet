@@ -69,6 +69,8 @@ var player = null,
 	help = false,
 	gameOver = false,
 	miniMapVisible = true,
+	pauseMusic = false,
+	play = false,
 	wallX = 0,
 	wallY = 0,
 	playerImg = null,
@@ -76,7 +78,9 @@ var player = null,
 	helpImg = null,
 	wallImg = null,
 	grassImg = null,
-	background = null;
+	background = null
+	step = null,
+	music = null;
 
 //Cargar imágenes
 playerImg = new Image();
@@ -91,6 +95,8 @@ wallImg.src = "assets/laberinto/wall.jpg";
 grassImg.src = "assets/laberinto/grass.jpg";
 helpImg.src = "assets/laberinto/help.jpg";
 background.src = "assets/laberinto/background.jpg";
+music = new Audio("assets/sound/background.ogg");
+step = new Audio("assets/sound/background.ogg");
 //Clase de los bloques
 function Chunk(img, x, y, w, h, isWall) {
 	this.img = img;
@@ -313,6 +319,37 @@ window.addEventListener("keypress", function(e) {
 	if (!gameOver && !help)
 		movePlayer(player, e.key.toUpperCase());
 });
+
+function path(i,j){
+	//Arriba
+	if(matrix[i][j]==1)
+		return;
+
+			if(matrix[i][j] == 0){
+				matrix[i][j] = 1;
+				map2[i][j].img = null;
+			}
+
+	
+			if(matrix[i][j+1]==0){
+				path(i,j+1);
+			}
+			
+			if(matrix[i][j-1]==0){
+				path(i,j-1);
+			}
+		
+		
+
+			if(matrix[i+1][j]==0){
+				path(i+1,j);
+			}
+			
+			if(matrix[i-1][j]==0){
+				path(i-1,j);
+			}
+		
+}
 //Inicializa el juego
 function init() {
 	//Inicializar jugador
@@ -321,5 +358,7 @@ function init() {
 	createMap(map2);
 	fillMap(map, 0, 99, 19);
 	fillMap(map2, 0, 0, 10);
+	//foo();
+	//console.log();
 	run();
 }
