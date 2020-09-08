@@ -72,6 +72,8 @@ var player = null,
 	help = false,
 	gameOver = false,
 	miniMapVisible = true,
+	pause = false,
+	play = false,
 	wallX = 0,
 	wallY = 0,
 	playerImg = null,
@@ -79,8 +81,8 @@ var player = null,
 	helpImg = null,
 	wallImg = null,
 	grassImg = null,
-	background = null;
-
+	background = null
+	music = null;
 //Cargar imágenes
 playerImg = new Image();
 borderImg = new Image();
@@ -88,6 +90,7 @@ grassImg = new Image();
 wallImg = new Image();
 helpImg = new Image();
 background = new Image();
+music = new Audio("assets/sound/background.ogg");
 playerImg.src = "assets/laberinto/player.png";
 borderImg.src = "assets/laberinto/border.jpg";
 wallImg.src = "assets/laberinto/wall.jpg";
@@ -192,7 +195,7 @@ function win(context) {
 		context.fillStyle = "#FFF";
 		context.fillText("¡GANASTE :D!", 48, 99);
 		context.font = "8px Arial";
-		context.fillText("'P' para continuar", 70, 110);
+		context.fillText("'C' para continuar", 70, 110);
 		gameOver = true;
 	}
 
@@ -242,7 +245,6 @@ function walking(player,img,count){
 //Mueve al jugador y verifica colisiones con el mapa
 function movePlayer(player, key) {
 	player.img = playerImg;
-
 	switch (key) {
 		case 'W':
 			if (++map[0][0].y <= 99) {
@@ -322,9 +324,17 @@ window.addEventListener("keypress", function(e) {
 		miniMapVisible = !miniMapVisible;
 	}
 	//El jugador puede jugar de nuevo (reinicia el mapa)
-	if (e.key.toUpperCase() == 'P' && gameOver)
+	if (e.key.toUpperCase() == 'C' && gameOver)
 		reset();
+	//Pause/Play música
+	if(e.key.toUpperCase() == 'P')
+		pause = !pause;
 
+	if(pause)
+		music.pause();
+	else
+		music.play();
+		
 	//No puedes moverte si la ayuda está activa o el juego ha  terminado
 	if (!gameOver && !help)
 		movePlayer(player, e.key.toUpperCase());
@@ -333,6 +343,8 @@ window.addEventListener("keypress", function(e) {
 function init() {
 	//Inicializar jugador
 	player = new Chunk(playerImg, pX, pY, pW, pH, false);
+	music.volume = 0.5;
+	music.loop = true;
 	let url = "assets/laberinto/anim/";
 	for (let i = 0; i < 8; i++) {
 		sprites.push(new Image());
