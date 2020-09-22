@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	 <meta charset="UTF-8">
+	<title>Clase</title>
+	<style type="text/css">
+		.super_div{
+			width: 100%;
+			height: 500px;
+			background-color: #D5D8DC;
+		}
+		.mini_div{
+			width: 30%;
+			margin: 1%;
+			border-radius: 5px;
+			border-width: 1px;
+			border-style: solid;
+			border-color: black;
+			height: 300px;
+			float: left;
+		}
+		h1{
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="super_div">
+		<h1>Aquí no hay nada</h1>
+		<center>
+			<form id="formulario">
+				<fieldset style="width: 40%;">
+					<legend>
+						Datos del usuario
+					</legend>
+					<label> email: </label>
+					<input type="text" style="width: 100%;height: 40px;" name="email" id="email" value="" placeholder="">
+
+					<label>contraseña</label>
+
+					<input type="text" style="width: 100%;height: 40px;" name="password" id="password" value="" placeholder="">
+
+					<label>año de nacimiento</label>
+
+					<input type="text" style="width: 100%;height: 40px;" name="year" id="year" value="" placeholder="">
+
+					<button type="button" id="guardar_info"> Guardar regisro</button>
+				</fieldset>
+			</form>
+
+			<br>
+		
+			<center>
+			<table border="1" style="width: 44%;">
+				<thead>
+					<tr>
+						<td>
+							Email
+						</td>
+						<td>
+							Password
+						</td>
+						<td>
+							Año
+						</td>
+					</tr>
+				</thead>
+				<tbody id="content_table">
+
+				</tbody>
+			</table>
+
+			<button id="mostrar_info"> actualizar tabla </button>
+		</center>
+		<h1 id="edad_h1">  </h1>
+	</div>
+
+  
+
+	<script type="text/javascript" src="Js/jquery.js"></script>
+	<script type="text/javascript">
+		
+		$("document").ready(function(){
+			$("#guardar_info").click(function(){
+				var mail = $("#email").val();
+				var pass = $("#password").val();
+				var year =  $("#year").val();
+				$.ajax({
+					type: 'POST',
+					url: 'php/file.php',
+					data: { 
+						'email': mail,
+						'password': pass,
+						'year': year,
+					},
+					success: function(response){
+						alert("Guardado correctamente")
+					},
+					error: function(err){
+						console.log(err);
+					},
+			});
+		});
+
+		$("#mostrar_info").click(function(){
+			$("#content_table").find("tr").remove();
+			$.ajax({
+					type: 'POST',
+					url: 'php/file.php',
+					data: { 
+						'get': 'get',
+					},
+					success: function(response){
+						for (let i = 0; i < response.length; i++) {
+							$("#content_table").append(
+							"<tr> <td>" + response[i].email + "</td><td>" +  response[i].password + "</td><td>" +response[i].year+ "</td></tr>"
+							);
+						}
+					},
+					error: function(err){
+						console.log(err);
+					},
+			});
+
+
+		});
+
+	})
+		
+	</script>
+</body>
+</html>

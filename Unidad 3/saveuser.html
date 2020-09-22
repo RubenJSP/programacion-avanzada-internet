@@ -55,13 +55,32 @@
 	</div>
 
   
-
-<script type="text/javascript" src="jquery-3.3.1.min.js"></script>
-<script type="text/javascript">
-	
-	  
-	 
-
-</script>
+	<script type="text/javascript" src="Js/jquery.js"></script>
+	<script type="text/javascript">
+		
+		$("document").ready(function(){
+			$("#guardar_info").click(function(){
+				var mail = $("#email").val();
+				var pass = $("#password").val();
+				var year =  $("#year").val();
+				$.ajax({
+					type: 'POST',
+					url: 'php/file.php',
+					data: { 
+						'email': mail,
+						'password': pass,
+						'year': year,
+					},
+					success: function(response){
+						alert("Guardado correctamente")
+					},
+					error: function(err){
+						console.log(err);
+					},
+			});
+		});
+		})
+		
+	</script>
 </body>
 </html>
