@@ -1,3 +1,9 @@
+<?php
+  include 'controllers/controller.php';
+  $user = new UserController();
+  $datos = $user->get();
+  echo json_encode($datos);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,30 +71,23 @@
                                     <thead class="thead-dark">
                                       <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">First</th>
-                                        <th scope="col">Last</th>
-                                        <th scope="col">E-Mail</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Estatus</th>
+                                        <th scope="col">Acciones</th>
                                       </tr>
                                     </thead>
                                     <tbody>
                                       <tr>
                                         <th scope="row">1</th>
                                         <td>Mark</td>
-                                        <td>Otto</td>
+                                        <td><a href="mailto:mail@mail.com">mail@mail.com</a></td>
                                         <td>@mdo</td>
-                                      </tr>
-                                      <tr>
-                                        <th scope="row">2</th>
-                                        <td>Jacob</td>
-                                        <td>Thornton</td>
-                                        <td>@fat</td>
-                                      </tr>
-                                      <tr>
-                                        <th scope="row">3</th>
-                                        <td>Larry</td>
-                                        <td>the Bird</td>
-                                        <td>@twitter</td>
-                                      </tr>
+                                        <td>
+                                          <button type="button" class="btn btn-warning"><i class="fas fa-pencil-alt"></i> Editar</button>
+                                          <button type="button" class="btn btn-danger" onclick="remove(1)"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                        </td>
+                                      </tr>                   
                                     </tbody>
                                   </table>
                             </div>
@@ -152,9 +151,6 @@
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                       </div>
                       <input type="password" class="form-control fix-rounded-right" id="ps1" required>
-                      <div class="invalid-feedback">
-                        Ingrese algo válido
-                      </div>
                     </div>
                   </div>
                   <div class="form-group">
@@ -164,9 +160,6 @@
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                       </div>
                       <input type="password" class="form-control fix-rounded-right" id="ps2" required>
-                      <div class="invalid-feedback">
-                        Ingrese algo válido
-                      </div>
                     </div>
                   </div>
                   <div class="modal-footer">
@@ -182,16 +175,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    <script>
-        function validate(){
-          if($("#ps1").val() == $("#ps2").val()){
-            return true
-          }else{
-            swal("Las contraseñas no coinciden");
-            return false
-          }
-
-        }
-    </script>
+    <script src="js/main.js"></script>
   </body>
 </html>
