@@ -1,8 +1,7 @@
 <?php
-  include 'controllers/controller.php';
+  include 'controllers/UserController.php';
   $user = new UserController();
   $datos = $user->get();
-  echo json_encode($datos);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +17,7 @@
         <div class="container"> 
             <!-- NAV-->
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <a class="navbar-brand" href="#">TAQUESABROSO</a>
+                <a class="navbar-brand" href="#">PAGINA</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -59,6 +58,23 @@
                     <li class="breadcrumb-item active" aria-current="page">Home</li>
                     </ol>
                 </nav>
+                <!-- NOTIFICACION-->
+                  <?php if(isset($_SESSION['status']) && $_SESSION['status']=="success"): ?>
+                    <div class="alert alert-success" role="alert">
+                      <h4 class="alert-heading">Bienvenido!</h4>
+                      <p>Tu registro se ha completado con éxito.</p>
+                    </div>
+                    <?php unset($_SESSION['status'])?>
+                  <?php endif ?>
+
+                  <?php if(isset($_SESSION['status']) && $_SESSION['status']=="error"): ?>
+                    <div class="alert alert-error" role="alert">
+                      <h4 class="alert-heading"><=? $_SESSION['errror']?></h4>
+                      <p>Algo salió mal, <=? $_SESSION['msg'] ?></p>
+                    </div>
+                    <?php unset($_SESSION['status'])?>
+                  <?php endif ?>
+
                 <div class="row">
                     <div class="col-12 md-4">
                         <div class="card">
@@ -78,16 +94,26 @@
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      <tr>
-                                        <th scope="row">1</th>
-                                        <td>Mark</td>
-                                        <td><a href="mailto:mail@mail.com">mail@mail.com</a></td>
-                                        <td>@mdo</td>
+                                    <?php if(isset($datos) && count($datos)>0):?>
+                                      <?php foreach ($datos as $user): ?>
+                                        <tr>
+                                        <th scope="row"><?php echo $user['id']; ?></th>
+                                        <td><?php echo $user['nombre']; ?></td>
+                                        <td><a href="mailto:<?php echo $data['email']; ?>"><?php echo $user['email'];?></a></td>
+                                        <td>
+                                        <?php if($user['estatus']): ?>
+                                          <span class="badge badge-success">Activo</span>
+                                        <?php else: ?>
+                                          <span class="badge badge-danger">Inactivo</span>
+                                        <?php endif ?>
+                                        </td>
                                         <td>
                                           <button type="button" class="btn btn-warning"><i class="fas fa-pencil-alt"></i> Editar</button>
-                                          <button type="button" class="btn btn-danger" onclick="remove(1)"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                          <button type="button" class="btn btn-danger" onclick="remove(<?php $user['id']?>)"><i class="fas fa-trash-alt"></i> Eliminar</button>
                                         </td>
-                                      </tr>                   
+                                      </tr> 
+                                        <?php endforeach ?>
+                                    <?php endif ?>                 
                                     </tbody>
                                   </table>
                             </div>
@@ -107,26 +133,14 @@
               </button>
             </div>
               <div class="modal-body">
-                <form onsubmit="return validate()">
+                <form action ="controllers/UserController.php" method ="POST" onsubmit="return validate()">
                   <div class="form-group">
-                    <label for="name">Nombre</label>
+                    <label for="name">Nombre completo</label>
                     <div class="input-group input-group-sm">
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                       </div>
-                      <input type="text" class="form-control fix-rounded-right" required>
-                      <div class="invalid-feedback">
-                        No introducir numeros
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="name">Apellido</label>
-                    <div class="input-group input-group-sm">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-id-card"></i></span>
-                      </div>
-                      <input type="text" class="form-control fix-rounded-right" required>
+                      <input name="name" type="text" class="form-control fix-rounded-right" required>
                       <div class="invalid-feedback">
                         No introducir numeros
                       </div>
@@ -138,7 +152,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                       </div>
-                      <input type="text" class="form-control fix-rounded-right" required>
+                      <input name="email" type="text" class="form-control fix-rounded-right" required>
                       <div class="invalid-feedback">
                         No introducir numeros
                       </div>
@@ -150,7 +164,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                       </div>
-                      <input type="password" class="form-control fix-rounded-right" id="ps1" required>
+                      <input name="password" type="password" class="form-control fix-rounded-right" id="ps1" required>
                     </div>
                   </div>
                   <div class="form-group">
@@ -161,6 +175,7 @@
                       </div>
                       <input type="password" class="form-control fix-rounded-right" id="ps2" required>
                     </div>
+                    <input  type="hidden" name="action" value="store">
                   </div>
                   <div class="modal-footer">
                       <button type="button" class="btn btn-secondary btn-warning" data-dismiss="modal">Close</button>
