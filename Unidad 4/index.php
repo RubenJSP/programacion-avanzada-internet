@@ -61,16 +61,14 @@
                 <!-- NOTIFICACION-->
                   <?php if(isset($_SESSION['status']) && $_SESSION['status']=="success"): ?>
                     <div class="alert alert-success" role="alert">
-                      <h4 class="alert-heading">Bienvenido!</h4>
-                      <p>Tu registro se ha completado con éxito.</p>
+                      Se ha registrado exitosamente!
                     </div>
                     <?php unset($_SESSION['status'])?>
                   <?php endif ?>
 
                   <?php if(isset($_SESSION['status']) && $_SESSION['status']=="error"): ?>
-                    <div class="alert alert-error" role="alert">
-                      <h4 class="alert-heading"><=? $_SESSION['errror']?></h4>
-                      <p>Algo salió mal, <=? $_SESSION['msg'] ?></p>
+                    <div class="alert alert-danger" role="alert">
+                      <strong><?php echo $_SESSION['msg'] ?> No se pudo registrar</strong>
                     </div>
                     <?php unset($_SESSION['status'])?>
                   <?php endif ?>
