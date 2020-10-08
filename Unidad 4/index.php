@@ -61,14 +61,16 @@
                 <!-- NOTIFICACION-->
                   <?php if(isset($_SESSION['status']) && $_SESSION['status']=="success"): ?>
                     <div class="alert alert-success" role="alert">
-                      Se ha registrado exitosamente!
+                    <strong><?php echo $_SESSION['msg'] ?> </strong>
+                      : Operación exitosa.
                     </div>
                     <?php unset($_SESSION['status'])?>
                   <?php endif ?>
 
                   <?php if(isset($_SESSION['status']) && $_SESSION['status']=="error"): ?>
                     <div class="alert alert-danger" role="alert">
-                      <strong><?php echo $_SESSION['msg'] ?> No se pudo registrar</strong>
+                      <strong><?php echo $_SESSION['msg'] ?> </strong>
+                      : Verifique la infomación.
                     </div>
                     <?php unset($_SESSION['status'])?>
                   <?php endif ?>
@@ -78,7 +80,7 @@
                         <div class="card">
                             <div class="card-header">
                                Usuarios registrados
-                              <button type="button" data-toggle="modal" data-target="#staticBackdrop" class="btn btn-primary float-right">Añadir usuario</button>
+                              <button id="btn" type="button" data-toggle="modal" data-target="#staticBackdrop" class="btn btn-primary float-right" onclick="clearForm()">Añadir usuario</button>
                             </div>
                             <div class="card-body">
                                 <table class="table table-striped">
@@ -86,7 +88,7 @@
                                       <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Nombre</th>
-                                        <th scope="col">Email</th>
+                                          <th scope="col">Email</th>
                                         <th scope="col">Estatus</th>
                                         <th scope="col">Acciones</th>
                                       </tr>
@@ -95,21 +97,21 @@
                                     <?php if(isset($datos) && count($datos)>0):?>
                                       <?php foreach ($datos as $user): ?>
                                         <tr>
-                                        <th scope="row"><?php echo $user['id']; ?></th>
-                                        <td><?php echo $user['nombre']; ?></td>
-                                        <td><a href="mailto:<?php echo $data['email']; ?>"><?php echo $user['email'];?></a></td>
-                                        <td>
-                                        <?php if($user['estatus']): ?>
-                                          <span class="badge badge-success">Activo</span>
-                                        <?php else: ?>
-                                          <span class="badge badge-danger">Inactivo</span>
-                                        <?php endif ?>
-                                        </td>
-                                        <td>
-                                          <button type="button" class="btn btn-warning"><i class="fas fa-pencil-alt"></i> Editar</button>
-                                          <button type="button" class="btn btn-danger" onclick="remove(<?php $user['id']?>)"><i class="fas fa-trash-alt"></i> Eliminar</button>
-                                        </td>
-                                      </tr> 
+                                            <th scope="row"><?php echo $user['id']; ?></th>
+                                            <td><?php echo $user['nombre']; ?></td>
+                                            <td><a href="mailto:<?php echo $data['email']; ?>"><?php echo $user['email'];?></a></td>
+                                            <td>
+                                            <?php if($user['estatus']): ?>
+                                              <span class="badge badge-success">Activo</span>
+                                            <?php else: ?>
+                                              <span class="badge badge-danger">Inactivo</span>
+                                            <?php endif ?>
+                                            </td>
+                                            <td>
+                                              <button type="button" data-info='<?= json_encode($user) ?>' onclick="edit(this)" data-toggle="modal" data-target="#staticBackdrop" class="btn btn-warning"><i class="fas fa-pencil-alt"></i> Editar</button>
+                                              <button type="button" class="btn btn-danger" onclick="remove(<?php echo $user['id']?>)"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                            </td>
+                                          </tr> 
                                         <?php endforeach ?>
                                     <?php endif ?>                 
                                     </tbody>
@@ -131,14 +133,14 @@
               </button>
             </div>
               <div class="modal-body">
-                <form action ="controllers/UserController.php" method ="POST" onsubmit="return validate()">
+                <form id="form" action ="controllers/UserController.php" method ="POST" onsubmit="return validate()">
                   <div class="form-group">
                     <label for="name">Nombre completo</label>
                     <div class="input-group input-group-sm">
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                       </div>
-                      <input name="name" type="text" class="form-control fix-rounded-right" required>
+                      <input id="nam" name="name" type="text" minlength="2" class="form-control fix-rounded-right" placeholder="Tú nombre y apellido" required>
                       <div class="invalid-feedback">
                         No introducir numeros
                       </div>
@@ -150,7 +152,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                       </div>
-                      <input name="email" type="text" class="form-control fix-rounded-right" required>
+                      <input  id="mail" name="email" type="email" class="form-control fix-rounded-right" placeholder="example@mail.com" required>
                       <div class="invalid-feedback">
                         No introducir numeros
                       </div>
@@ -162,7 +164,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                       </div>
-                      <input name="password" type="password" class="form-control fix-rounded-right" id="ps1" required>
+                      <input minlength="5" name="password" type="password" class="form-control fix-rounded-right" id="ps1"  placeholder="••••••••" required>
                     </div>
                   </div>
                   <div class="form-group">
@@ -171,9 +173,10 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                       </div>
-                      <input type="password" class="form-control fix-rounded-right" id="ps2" required>
+                      <input minlength="5" type="password" class="form-control fix-rounded-right" id="ps2" placeholder="••••••••" required>
                     </div>
-                    <input  type="hidden" name="action" value="store">
+                    <input  type="hidden" name="action" id="action" value="store">
+                    <input id ="id" type="hidden" name="id" value="">
                   </div>
                   <div class="modal-footer">
                       <button type="button" class="btn btn-secondary btn-warning" data-dismiss="modal">Close</button>

@@ -10,7 +10,7 @@
             return new PDO($dsn,USER,PASSWORD ,array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         }
         catch(PDOException $e) {
-            echo "no conection";
+            return null;    
             exit;
         }
          

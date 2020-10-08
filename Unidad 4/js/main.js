@@ -30,6 +30,16 @@ function validate(){
     });
   }
   //Edita un usuario en la base de datos
-  function edit(id){
-
+  function edit(target){
+      var data = $(target).data('info');
+      $('#action').val("update");
+      $('#id').val(data['id']);
+      $('#nam').val(data['nombre']);
+      $('#mail').val(data['email']);
+      $('#ps1').val(data['pass']);
+      $('#ps2').val(data['pass']);
   }
+
+function clearForm(){
+  document.getElementById("form").reset();
+}
