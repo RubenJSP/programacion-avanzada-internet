@@ -69,10 +69,10 @@
 
                   <?php if(isset($_SESSION['status']) && $_SESSION['status']=="error"): ?>
                     <div class="alert alert-danger" role="alert">
-                      <strong><?php echo $_SESSION['msg'] ?> </strong>
+                      <strong><?php echo $_SESSION['msg']; ?> </strong>
                       : Verifique la infomación.
                     </div>
-                    <?php unset($_SESSION['status'])?>
+                    <?php unset($_SESSION['status']);?>
                   <?php endif ?>
 
                 <div class="row">
@@ -109,7 +109,7 @@
                                             </td>
                                             <td>
                                               <button type="button" data-info='<?= json_encode($user) ?>' onclick="edit(this)" data-toggle="modal" data-target="#staticBackdrop" class="btn btn-warning"><i class="fas fa-pencil-alt"></i> Editar</button>
-                                              <button type="button" class="btn btn-danger" onclick="remove(<?php echo $user['id']?>)"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                              <button type="button" class="btn btn-danger" onclick="remove(<?php echo $user['id'];?>,this)"><i class="fas fa-trash-alt"></i> Eliminar</button>
                                             </td>
                                           </tr> 
                                         <?php endforeach ?>
@@ -133,7 +133,7 @@
               </button>
             </div>
               <div class="modal-body">
-                <form id="form" action ="controllers/UserController.php" method ="POST" onsubmit="return validate()">
+                <form id="form" action ="users" method ="POST" onsubmit="return validate()">
                   <div class="form-group">
                     <label for="name">Nombre completo</label>
                     <div class="input-group input-group-sm">
@@ -177,6 +177,7 @@
                     </div>
                     <input  type="hidden" name="action" id="action" value="store">
                     <input id ="id" type="hidden" name="id" value="">
+                    <input id ="token" type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>">
                   </div>
                   <div class="modal-footer">
                       <button type="button" class="btn btn-secondary btn-warning" data-dismiss="modal">Close</button>
@@ -188,7 +189,7 @@
         </div>
       </div>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     <script src="js/main.js"></script>

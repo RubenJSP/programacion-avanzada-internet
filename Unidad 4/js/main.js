@@ -14,7 +14,7 @@ function validate(){
 
   }
   //Elimina un usuario del a base de datos
-  function remove(id){
+  function remove(id,target,token){
     swal({
         title: "",
         text: "'¿Desea eliminar el usuario?'",
@@ -23,13 +23,31 @@ function validate(){
         dangerMode: true,
       }).then((willDelete) => {
           if (willDelete) {
-        swal("El usuario se ha eliminado correctamente", {
-          icon: "success",
-        });
+            $.ajax({
+              type: "POST",
+              url: "users",
+              data:{
+                  "action": "remove",
+                  "id": id,
+                  "token": $("#token").val(),
+              },
+              success: function (data) {
+                console.log(data)
+                if(data.status == "success"){
+                  $(target).parent().parent().remove();
+                  swal("El usuario se ha eliminado correctamente", {
+                    icon: "success",
+                  });
+                }
+              },
+              error: function(err){
+                  console.error(err);
+              }
+          });
       }
     });
   }
-  //Edita un usuario en la base de datos
+  //Cambia el valor del POST para editar en la base de datos
   function edit(target){
       var data = $(target).data('info');
       $('#action').val("update");

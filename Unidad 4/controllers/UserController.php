@@ -3,7 +3,7 @@ include_once 'config.php';
 include_once 'connection.php';
 
 if(isset($_POST) && isset($_POST['action'])){
-    var_dump($_POST);
+    if($_SESSION['token'] == $_POST['token']){
     $user = new UserController();
     switch ($_POST['action']) {
         case 'store':
@@ -19,12 +19,12 @@ if(isset($_POST) && isset($_POST['action'])){
                     $_SESSION['status'] = "error";
                     $_SESSION['msg'] = "Registro no guardado";
                 }
-                header('Location: ../');
+                header('Location: index.php');
             }
             catch(PDOException $e) {
                 $_SESSION['status'] = "error";
                 $_SESSION['msg'] = "Registro no guardado";
-                header('Location: ../');
+                header('Location: index.php');
                 exit;
             }
             break;
@@ -42,18 +42,30 @@ if(isset($_POST) && isset($_POST['action'])){
                     $_SESSION['status'] = "error";
                     $_SESSION['msg'] = "No se ha podido actualizar";
                 }
-                header('Location: ../');
+                header('Location: index.php');
             }
             catch(PDOException $e) {
                $_SESSION['status'] = "error";
                 $_SESSION['msg'] = "No se ha podido actualizar";
-                header('Location: ../');
+                header('Location: index.php');
                 exit;
             }
-         break;
+        break;
+            case 'remove':
+                try{
+                    $id = strip_tags($_POST['id']);
+                    header('Content-Type: application/json');
+                    echo json_encode($user->remove($id)); 
+                }catch(PDOException $e){
+                    header('Content-Type: application/json');
+                    echo json_encode($e);
+                    exit;
+                }
+            break;
         default:
             # code...
             break;
+    }
     }
 }
 
@@ -100,9 +112,26 @@ Class UserController{
             $stm->execute([$name,$mail,$password,$id]);
         }else{
             return array();
-        }
-       
+        }  
+    }
+
+    function remove($id) {
+        $connection = connect();
+        if($id!=""){    
+            $response = 
+            $query = "DELETE FROM users WHERE id = ?";
+            $stm = $connection->prepare($query);
+            $stm->execute([$id]);
+            return array(
+                "status" => "success",
+                "msj" => "Se ha eliminado correctamente",
+            );
+        }else{
+            return array(
+                "status" => "error",
+                "msj" => "No se ha podido eliminar",
+            );
+        }  
     }
 }
-
 ?>
